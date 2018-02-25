@@ -1,0 +1,59 @@
+<html>
+<head>
+	<title>D3 Sandbox</title>
+	<script src="js/d3.js" charset="utf-8"></script>
+</head>
+<body>
+	<div id="chart"></div>
+	<script>
+		//var chartData = [250, 100, 750, 500, 440, 120, 310, 600, 750, 500, 440, 120, 310,];
+
+		var chartData = [],
+		dataCount = 40,
+		dataMax = 500;
+
+		for(var i = 0; i < dataCount; i++){
+			chartData.push(Math.random() * dataMax);
+		}
+
+		var width = 500;
+		var height = 500;	
+
+		// Set Y Scale
+		var y = d3.scale.linear()
+			.domain([0, d3.max(chartData)])
+			.range([0, height])
+
+		// Set X Scale
+		var x = d3.scale.ordinal()
+			.domain(d3.range(0, chartData.length))
+			.rangeBands([0, width])
+
+		// Set Color Scale
+		var colors = d3.scale.linear()
+			.domain([0, chartData.length])
+			.range(['#6ba6d8','#1e405d'])
+
+		var chart = d3.select('#chart').append('svg')
+			.attr('width', width)
+			.attr('height', height)
+			.style('background', '#f9f9f9')
+			.selectAll('rect')
+			.data(chartData)
+			.enter().append('rect')
+				.style('fill', function(d, i){
+					return colors(i);
+				})
+				.attr('width', x.rangeBand())
+				.attr('height', function(d){
+					return y(d);
+				})
+				.attr('x', function(d, i){
+					return x(i);
+				})
+				.attr('y', function(d){
+					return height - y(d);
+				})
+	</script>
+</body>
+</html>
